@@ -1,7 +1,7 @@
 import UIKit
 import SwiftUI
 
-struct UIKITView: UIViewRepresentable {
+struct UIKitView: UIViewRepresentable {
   func makeUIView(context: Context) -> TrackedUIView {
     let view = TrackedUIView()
     view.backgroundColor = .lightGray

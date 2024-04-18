@@ -18,7 +18,7 @@ struct ContentView: View {
             List {
               ForEach(0..<1000) { i in
                 ZStack {
-                  UIKITView()
+                  UIKitView()
                   Text("\(i)")
                 }
               }
@@ -31,7 +31,7 @@ struct ContentView: View {
               LazyVStack {
                 ForEach(0..<1000) { i in
                   ZStack {
-                    UIKITView()
+                    UIKitView()
                     Text("\(i)")
                   }
                 }
@@ -45,7 +45,7 @@ struct ContentView: View {
               VStack {
                 ForEach(0..<1000) { i in
                   ZStack {
-                    UIKITView()
+                    UIKitView()
                     Text("\(i)")
                   }
                 }
@@ -64,7 +64,7 @@ struct ContentView: View {
                   LazyHStack {
                     ForEach(0..<100) { j in
                       ZStack {
-                        UIKITView()
+                        UIKitView()
                         Text("(\(i), \(j))")
                       }
                     }
@@ -83,7 +83,7 @@ struct ContentView: View {
                     LazyHStack {
                       ForEach(0..<100) { j in
                         ZStack {
-                          UIKITView()
+                          UIKitView()
                           Text("(\(i), \(j))")
                         }
                       }
