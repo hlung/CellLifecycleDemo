@@ -52,6 +52,7 @@ struct ContentView: View {
                   LazyHStack {
                     ForEach(1..<100) { j in
                       CellView(text: "(\(i), \(j))")
+                        .frame(width: 80, height: 80)
                     }
                   }
                 }
@@ -67,6 +68,7 @@ struct ContentView: View {
                     LazyHStack {
                       ForEach(1..<100) { j in
                         CellView(text: "(\(i), \(j))")
+                          .frame(width: 100, height: 100)
                       }
                     }
                   }
