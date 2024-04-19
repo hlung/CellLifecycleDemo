@@ -16,11 +16,8 @@ struct ContentView: View {
 
           NavigationLink("List") {
             List {
-              ForEach(0..<1000) { i in
-                ZStack {
-                  UIKitView()
-                  Text("\(i)")
-                }
+              ForEach(1..<1000) { i in
+                CellView(text: "\(i)")
               }
             }
             .navigationTitle("List")
@@ -29,11 +26,8 @@ struct ContentView: View {
           NavigationLink("ScrollView + LazyVStack") {
             ScrollView {
               LazyVStack {
-                ForEach(0..<1000) { i in
-                  ZStack {
-                    UIKitView()
-                    Text("\(i)")
-                  }
+                ForEach(1..<1000) { i in
+                  CellView(text: "\(i)")
                 }
               }
             }
@@ -43,11 +37,8 @@ struct ContentView: View {
           NavigationLink("ScrollView + VStack") {
             ScrollView {
               VStack {
-                ForEach(0..<1000) { i in
-                  ZStack {
-                    UIKitView()
-                    Text("\(i)")
-                  }
+                ForEach(1..<1000) { i in
+                  CellView(text: "\(i)")
                 }
               }
             }
@@ -59,14 +50,11 @@ struct ContentView: View {
 
           NavigationLink("List / ScrollView + LazyHStack") {
             List {
-              ForEach(0..<1000) { i in
+              ForEach(1..<1000) { i in
                 ScrollView(.horizontal) {
                   LazyHStack {
-                    ForEach(0..<100) { j in
-                      ZStack {
-                        UIKitView()
-                        Text("(\(i), \(j))")
-                      }
+                    ForEach(1..<100) { j in
+                      CellView(text: "(\(i), \(j))")
                     }
                   }
                 }
@@ -78,14 +66,11 @@ struct ContentView: View {
           NavigationLink("ScrollView + LazyVStack / ScrollView + LazyHStack") {
             ScrollView {
               LazyVStack {
-                ForEach(0..<1000) { i in
+                ForEach(1..<1000) { i in
                   ScrollView(.horizontal) {
                     LazyHStack {
-                      ForEach(0..<100) { j in
-                        ZStack {
-                          UIKitView()
-                          Text("(\(i), \(j))")
-                        }
+                      ForEach(1..<100) { j in
+                        CellView(text: "(\(i), \(j))")
                       }
                     }
                   }
@@ -102,6 +87,17 @@ struct ContentView: View {
 
     }
 
+  }
+}
+
+struct CellView: View {
+  let text: String
+
+  var body: some View {
+    ZStack {
+      UIKitView(text: text)
+      Text(text)
+    }
   }
 }
 

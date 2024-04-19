@@ -2,8 +2,10 @@ import UIKit
 import SwiftUI
 
 struct UIKitView: UIViewRepresentable {
+  var text: String = ""
+
   func makeUIView(context: Context) -> TrackedUIView {
-    let view = TrackedUIView()
+    let view = TrackedUIView(text: text)
     view.backgroundColor = .lightGray
     return view
   }
@@ -16,15 +18,18 @@ struct UIKitView: UIViewRepresentable {
 class TrackedUIView: UIView {
   static var viewCount = 0
 
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+  let text: String
+
+  init(text: String) {
+    self.text = text
+    super.init(frame: .zero)
     Self.viewCount += 1
-    print(type(of: self), "init", "(viewCount: \(Self.viewCount))", Unmanaged.passUnretained(self).toOpaque())
+    print(type(of: self), "✅   init", text, "(viewCount: \(Self.viewCount))", "address:", Unmanaged.passUnretained(self).toOpaque())
   }
 
   deinit {
     Self.viewCount -= 1
-    print(type(of: self), "deinit", "(viewCount: \(Self.viewCount))", Unmanaged.passUnretained(self).toOpaque())
+    print(type(of: self), "❌ deinit", text, "(viewCount: \(Self.viewCount))", "address:", Unmanaged.passUnretained(self).toOpaque())
   }
 
   required init?(coder: NSCoder) {
