@@ -14,16 +14,15 @@ struct ContentView: View {
 
         Section("1D") {
 
-          NavigationLink("List") {
+          NavigationLinkWithTitle("List") {
             List {
               ForEach(1..<1000) { i in
                 CellView(text: "\(i)")
               }
             }
-            .navigationTitle("List")
           }
 
-          NavigationLink("ScrollView + LazyVStack") {
+          NavigationLinkWithTitle("LazyVStack") {
             ScrollView {
               LazyVStack {
                 ForEach(1..<1000) { i in
@@ -31,10 +30,9 @@ struct ContentView: View {
                 }
               }
             }
-            .navigationTitle("ScrollView + LazyVStack")
           }
 
-          NavigationLink("ScrollView + VStack") {
+          NavigationLinkWithTitle("VStack") {
             ScrollView {
               VStack {
                 ForEach(1..<1000) { i in
@@ -42,13 +40,12 @@ struct ContentView: View {
                 }
               }
             }
-            .navigationTitle("ScrollView + VStack")
           }
         }
 
         Section("2D") {
 
-          NavigationLink("List / ScrollView + LazyHStack") {
+          NavigationLinkWithTitle("List / LazyHStack") {
             List {
               ForEach(1..<1000) { i in
                 ScrollView(.horizontal) {
@@ -60,10 +57,9 @@ struct ContentView: View {
                 }
               }
             }
-            .navigationTitle("List / ScrollView + LazyHStack")
           }
 
-          NavigationLink("ScrollView + LazyVStack / ScrollView + LazyHStack") {
+          NavigationLinkWithTitle("LazyVStack / LazyHStack") {
             ScrollView {
               LazyVStack {
                 ForEach(1..<1000) { i in
@@ -77,7 +73,35 @@ struct ContentView: View {
                 }
               }
             }
-            .navigationTitle("List / ScrollView + LazyHStack")
+          }
+
+          NavigationLinkWithTitle("Grid") {
+            ScrollView {
+              Grid {
+                ForEach(1..<1000) { i in
+                  if i % 2 == 1 {
+                    GridRow {
+                      CellView(text: "\(i)")
+                      CellView(text: "\(i + 1)")
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          NavigationLinkWithTitle("LazyVGrid") {
+            let columns = [
+              GridItem(spacing: 32),
+              GridItem(spacing: 32)
+            ]
+            ScrollView {
+              LazyVGrid(columns: columns) {
+                ForEach(1..<1000) { i in    
+                  CellView(text: "\(i)")
+                }
+              }
+            }
           }
 
         }
@@ -97,6 +121,22 @@ struct CellView: View {
     ZStack {
       UIKitView(text: text)
       Text(text)
+    }
+  }
+}
+
+struct NavigationLinkWithTitle<Content: View>: View {
+  let title: String
+  var content: Content
+
+  init(_ title: String, @ViewBuilder content: () -> Content) {
+    self.title = title
+    self.content = content()
+  }
+
+  var body: some View {
+    NavigationLink(title) {
+      content.navigationTitle(title)
     }
   }
 }
