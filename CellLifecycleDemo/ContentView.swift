@@ -12,7 +12,7 @@ struct ContentView: View {
     NavigationStack {
       List {
 
-        Section {
+        Section("1D") {
 
           NavigationLink("List") {
             List {
@@ -55,7 +55,7 @@ struct ContentView: View {
           }
         }
 
-        Section {
+        Section("2D") {
 
           NavigationLink("List / ScrollView + LazyHStack") {
             List {
@@ -98,6 +98,7 @@ struct ContentView: View {
         }
 
       }
+      .navigationTitle("Cell Lifecycle Demo")
 
     }
 
