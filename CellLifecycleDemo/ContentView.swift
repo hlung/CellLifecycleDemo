@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+
+  let range = 1...1000
+
   var body: some View {
     NavigationStack {
       List {
@@ -16,7 +19,7 @@ struct ContentView: View {
 
           NavigationLinkWithTitle("List") {
             List {
-              ForEach(1..<1000) { i in
+              ForEach(range, id: \.self) { i in
                 CellView(text: "\(i)")
               }
             }
@@ -25,7 +28,7 @@ struct ContentView: View {
           NavigationLinkWithTitle("LazyVStack") {
             ScrollView {
               LazyVStack {
-                ForEach(1..<1000) { i in
+                ForEach(range, id: \.self) { i in
                   CellView(text: "\(i)")
                 }
               }
@@ -35,7 +38,7 @@ struct ContentView: View {
           NavigationLinkWithTitle("VStack") {
             ScrollView {
               VStack {
-                ForEach(1..<1000) { i in
+                ForEach(range, id: \.self) { i in
                   CellView(text: "\(i)")
                 }
               }
@@ -48,7 +51,7 @@ struct ContentView: View {
           // Content row mode?
           NavigationLinkWithTitle("List / LazyHStack") {
             List {
-              ForEach(1..<1000) { i in
+              ForEach(range, id: \.self) { i in
                 ScrollView(.horizontal) {
                   LazyHStack {
                     ForEach(1..<100) { j in
@@ -64,7 +67,7 @@ struct ContentView: View {
           NavigationLinkWithTitle("LazyVStack / LazyHStack") {
             ScrollView {
               LazyVStack {
-                ForEach(1..<1000) { i in
+                ForEach(range, id: \.self) { i in
                   ScrollView(.horizontal) {
                     LazyHStack {
                       ForEach(1..<100) { j in
@@ -81,7 +84,7 @@ struct ContentView: View {
           NavigationLinkWithTitle("Grid") {
             ScrollView {
               Grid {
-                ForEach(1..<1000) { i in
+                ForEach(range, id: \.self) { i in
                   if i % 2 == 1 {
                     GridRow {
                       CellView(text: "\(i)")
@@ -101,7 +104,7 @@ struct ContentView: View {
             ]
             ScrollView {
               LazyVGrid(columns: columns) {
-                ForEach(1..<1000) { i in    
+                ForEach(range, id: \.self) { i in
                   CellView(text: "\(i)")
                 }
               }
@@ -125,11 +128,14 @@ struct CellView: View {
     Button(action: {}) {
       UIKitView(text: text)
     }
+    .frame(height: 32)
+    .frame(maxWidth: .infinity)
   }
 }
 
 struct NavigationLinkWithTitle<Content: View>: View {
   let title: String
+  @ObservedObject var tracker = Tracker.shared
   var content: Content
 
   init(_ title: String, @ViewBuilder content: () -> Content) {
@@ -139,7 +145,11 @@ struct NavigationLinkWithTitle<Content: View>: View {
 
   var body: some View {
     NavigationLink(title) {
-      content.navigationTitle(title)
+      content
+        .navigationTitle(title)
+        .toolbar {
+          Text("Cell count: \(tracker.cellCount)")
+        }
     }
   }
 }
@@ -147,3 +157,4 @@ struct NavigationLinkWithTitle<Content: View>: View {
 #Preview {
   ContentView()
 }
+

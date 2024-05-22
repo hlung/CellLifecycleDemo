@@ -16,28 +16,35 @@ struct UIKitView: UIViewRepresentable {
 }
 
 class TrackedUIView: UIView {
-  static var viewCount = 0
-
   let text: String
   let label = UILabel()
 
   init(text: String) {
     self.text = text
     super.init(frame: .zero)
-    Self.viewCount += 1
-    print(type(of: self), "  init ✅", text, "address:", Unmanaged.passUnretained(self).toOpaque(), "(total view count: \(Self.viewCount))")
+    Task { @MainActor in
+      Tracker.shared.cellCount += 1
+      let address: String = Unmanaged.passUnretained(self).toOpaque().debugDescription
+      print("TrackedUIView", "  init ✅", text, "address: \(address)", "(total cell count: \(Tracker.shared.cellCount))")
+    }
 
     label.translatesAutoresizingMaskIntoConstraints = false
     addSubview(label)
     NSLayoutConstraint.activate([
       label.centerXAnchor.constraint(equalTo: centerXAnchor),
-      label.centerYAnchor.constraint(equalTo: centerYAnchor)
+      label.centerYAnchor.constraint(equalTo: centerYAnchor),
+      label.heightAnchor.constraint(equalTo: heightAnchor)
     ])
   }
 
   deinit {
-    Self.viewCount -= 1
-    print(type(of: self), "deinit ❌", text, "address:", Unmanaged.passUnretained(self).toOpaque(), "(total view count: \(Self.viewCount))")
+    // deinit cannot access self in a Task. So need to capture some var.
+    let address: String = Unmanaged.passUnretained(self).toOpaque().debugDescription
+    let text = self.text
+    Task { @MainActor in
+      Tracker.shared.cellCount -= 1
+      print("TrackedUIView", "deinit ❌", text, "address: \(address)", "(total cell count: \(Tracker.shared.cellCount))")
+    }
   }
 
   required init?(coder: NSCoder) {
