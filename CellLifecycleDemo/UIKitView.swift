@@ -38,7 +38,7 @@ class TrackedUIView: UIView {
   }
 
   deinit {
-    // deinit cannot access self in a Task. So need to capture some var.
+    // Need to capture some self var first, otherwise it will crash.
     let address: String = Unmanaged.passUnretained(self).toOpaque().debugDescription
     let text = self.text
     Task { @MainActor in
