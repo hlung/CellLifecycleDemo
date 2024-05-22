@@ -45,6 +45,7 @@ struct ContentView: View {
 
         Section("2D") {
 
+          // Content row mode?
           NavigationLinkWithTitle("List / LazyHStack") {
             List {
               ForEach(1..<1000) { i in
@@ -92,6 +93,7 @@ struct ContentView: View {
             }
           }
 
+          // Grid mode
           NavigationLinkWithTitle("LazyVGrid") {
             let columns = [
               GridItem(spacing: 32),
@@ -120,9 +122,8 @@ struct CellView: View {
   let text: String
 
   var body: some View {
-    ZStack {
+    Button(action: {}) {
       UIKitView(text: text)
-      Text(text)
     }
   }
 }
