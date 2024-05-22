@@ -20,8 +20,11 @@ struct ContentView: View {
             List {
               ForEach(1...max, id: \.self) { i in
                 CellView(text: "\(i)")
+                  .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
               }
             }
+            .listStyle(.plain)
+            .environment(\.defaultMinListRowHeight, 0)
           }
 
           NavigationLinkWithTitle("LazyVStack") {
@@ -89,12 +92,14 @@ struct ContentView: View {
                   LazyHStack {
                     ForEach(1..<100) { j in
                       CellView(text: "(\(i), \(j))")
-                        .frame(width: 80, height: 80)
+                        .frame(width: 100, height: 94)
                     }
                   }
                 }
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
               }
             }
+            .listStyle(.plain)
           }
 
           NavigationLinkWithTitle("LazyVStack x LazyHStack") {
@@ -105,7 +110,7 @@ struct ContentView: View {
                     LazyHStack {
                       ForEach(1..<100) { j in
                         CellView(text: "(\(i), \(j))")
-                          .frame(width: 100, height: 100)
+                          .frame(width: 100, height: 94)
                       }
                     }
                   }
