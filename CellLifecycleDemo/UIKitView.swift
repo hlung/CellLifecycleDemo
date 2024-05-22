@@ -13,6 +13,10 @@ struct UIKitView: UIViewRepresentable {
   func updateUIView(_ uiView: TrackedUIView, context: Context) {
     uiView.label.text = text
   }
+
+//  func sizeThatFits(_ proposal: ProposedViewSize, uiView: TrackedUIView, context: Context) -> CGSize? {
+//    return uiView.label.sizeThatFits(CGSize(width: proposal.width ?? .infinity, height: proposal.height ?? .infinity))
+//  }
 }
 
 class TrackedUIView: UIView {
@@ -29,11 +33,13 @@ class TrackedUIView: UIView {
     }
 
     label.translatesAutoresizingMaskIntoConstraints = false
+    label.textAlignment = .center
     addSubview(label)
     NSLayoutConstraint.activate([
-      label.centerXAnchor.constraint(equalTo: centerXAnchor),
-      label.centerYAnchor.constraint(equalTo: centerYAnchor),
-      label.heightAnchor.constraint(equalTo: heightAnchor)
+      label.topAnchor.constraint(equalTo: topAnchor),
+      label.leftAnchor.constraint(equalTo: leftAnchor),
+      label.bottomAnchor.constraint(equalTo: bottomAnchor),
+      label.rightAnchor.constraint(equalTo: rightAnchor)
     ])
   }
 
