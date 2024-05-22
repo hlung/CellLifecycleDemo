@@ -46,24 +46,10 @@ struct ContentView: View {
               }
             }
           }
+
         }
 
         Section("2D (\(max) elements)") {
-
-          NavigationLinkWithTitle("Grid") {
-            ScrollView {
-              Grid {
-                ForEach(1...max, id: \.self) { i in
-                  if i % 2 == 1 {
-                    GridRow {
-                      CellView(text: "\(i)")
-                      CellView(text: "\(i + 1)")
-                    }
-                  }
-                }
-              }
-            }
-          }
 
           // "Grid view" layout
           NavigationLinkWithTitle("LazyVGrid") {
@@ -75,6 +61,21 @@ struct ContentView: View {
               LazyVGrid(columns: columns) {
                 ForEach(1...max, id: \.self) { i in
                   CellView(text: "\(i)")
+                }
+              }
+            }
+          }
+
+          NavigationLinkWithTitle("Grid") {
+            ScrollView {
+              Grid {
+                ForEach(1...max, id: \.self) { i in
+                  if i % 2 == 1 {
+                    GridRow {
+                      CellView(text: "\(i)")
+                      CellView(text: "\(i + 1)")
+                    }
+                  }
                 }
               }
             }
@@ -136,7 +137,7 @@ struct CellView: View {
     Button(action: {}) {
       UIKitView(text: text)
     }
-    .frame(height: 32)
+    .frame(minHeight: 32)
     .frame(maxWidth: .infinity)
   }
 }
