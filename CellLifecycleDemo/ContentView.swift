@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
 
-  let max = 1000
+  let max = 200
 
   var body: some View {
     NavigationStack {
@@ -54,15 +54,30 @@ struct ContentView: View {
           // "Grid view" layout
           NavigationLinkWithTitle("LazyVGrid") {
             let columns = [
-              GridItem(spacing: 32),
-              GridItem(spacing: 32)
+              GridItem(spacing: 8),
+              GridItem(spacing: 8),
+              GridItem(spacing: 8),
+              GridItem(spacing: 8),
             ]
+
             ScrollView {
               LazyVGrid(columns: columns) {
                 ForEach(1...max, id: \.self) { i in
                   CellView(text: "\(i)")
+                    .frame(height: 188)
                 }
               }
+              Color.red
+                .overlay(alignment: .center) {
+                  ProgressView()
+                    .progressViewStyle(.circular)
+                    .padding(.vertical, 12)
+                }
+                .frame(height: 44)
+                .onAppear {
+                  print("loadMoreSpinner onAppear")
+                  // can trigger loading more items here
+                }
             }
           }
 
@@ -70,10 +85,12 @@ struct ContentView: View {
             ScrollView {
               Grid {
                 ForEach(1...max, id: \.self) { i in
-                  if i % 2 == 1 {
+                  if i % 2 == 1 { // This is a hack, but should be ok for our purpose
                     GridRow {
                       CellView(text: "\(i)")
+                        .frame(height: 188)
                       CellView(text: "\(i + 1)")
+                        .frame(height: 188)
                     }
                   }
                 }
