@@ -139,6 +139,14 @@ struct ContentView: View {
 
         }
 
+        Section("2D nested observableobject") {
+
+          NavigationLinkWithTitle("DataView") {
+            DataView()
+          }
+
+        }
+
       }
       .navigationTitle("Cell Lifecycle Demo")
 
