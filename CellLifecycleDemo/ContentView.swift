@@ -14,6 +14,18 @@ struct ContentView: View {
   var body: some View {
     NavigationStack {
       List {
+        Section("Others") {
+
+          NavigationLinkWithTitle("Focus testing") {
+            FocusTestingView()
+          }
+
+          NavigationLinkWithTitle("Nested ObservableObject") {
+            DataView()
+          }
+
+        }
+
         Section("1D (\(max) elements)") {
 
           NavigationLinkWithTitle("List") {
@@ -135,14 +147,6 @@ struct ContentView: View {
                 }
               }
             }
-          }
-
-        }
-
-        Section("2D nested observableobject") {
-
-          NavigationLinkWithTitle("DataView") {
-            DataView()
           }
 
         }
