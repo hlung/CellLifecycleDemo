@@ -11,6 +11,8 @@ struct ContentView: View {
 
   let max = 200
 
+  @FocusState var focusedIndex: Int?
+
   var body: some View {
     NavigationStack {
       List {
@@ -64,6 +66,69 @@ struct ContentView: View {
         Section("2D (\(max) elements)") {
 
           // "Grid view" layout
+          NavigationLinkWithTitle("LazyVGrid with masthead in safeAreaInset") {
+            let columns = [
+              GridItem(spacing: 8),
+              GridItem(spacing: 8),
+              GridItem(spacing: 8),
+              GridItem(spacing: 8),
+            ]
+
+            ScrollViewReader { proxy in
+              ScrollView {
+                LazyVGrid(columns: columns) {
+                  ForEach(1...max, id: \.self) { i in
+                    CellView(text: "\(i)")
+                      .frame(height: 188)
+                      .focused($focusedIndex, equals: i)
+                      .id(i)
+
+                  }
+                }
+              }
+              .safeAreaInset(edge: .top, content: {
+                // Adding this with VStack interferes with scrolling,
+                // safeAreaInset seems to work.
+                mastHeadView
+              })
+              .onChange(of: focusedIndex) { newValue in
+                print("focusedIndex: \(newValue)")
+                withAnimation(.easeIn) {
+                  proxy.scrollTo(newValue, anchor: .top)
+                }
+              }
+            }
+          }
+
+          NavigationLinkWithTitle("LazyVGrid with top padding") {
+            let columns = [
+              GridItem(spacing: 8),
+              GridItem(spacing: 8),
+              GridItem(spacing: 8),
+              GridItem(spacing: 8),
+            ]
+
+            ScrollViewReader { proxy in
+              ScrollView {
+                LazyVGrid(columns: columns) {
+                  ForEach(1...max, id: \.self) { i in
+                    CellView(text: "\(i)")
+                      .frame(height: 188)
+                      .focused($focusedIndex, equals: i)
+                      .id(i)
+                  }
+                }
+              }
+              .padding(.top, 10) // <---
+              .onChange(of: focusedIndex) { newValue in
+                print("focusedIndex: \(newValue)")
+                withAnimation(.easeIn) {
+                  proxy.scrollTo(newValue, anchor: .top)
+                }
+              }
+            }
+          }
+
           NavigationLinkWithTitle("LazyVGrid") {
             let columns = [
               GridItem(spacing: 8),
@@ -79,17 +144,6 @@ struct ContentView: View {
                     .frame(height: 188)
                 }
               }
-              Color.red
-                .overlay(alignment: .center) {
-                  ProgressView()
-                    .progressViewStyle(.circular)
-                    .padding(.vertical, 12)
-                }
-                .frame(height: 44)
-                .onAppear {
-                  print("loadMoreSpinner onAppear")
-                  // can trigger loading more items here
-                }
             }
           }
 
@@ -156,6 +210,17 @@ struct ContentView: View {
 
     }
 
+  }
+
+  var mastHeadView: some View {
+    Text("Masthead")
+      .font(.title)
+      .frame(height: 300)
+      .frame(maxWidth: .infinity)
+      .background(.green.opacity(0.2))
+      .overlay(alignment: .bottomLeading) {
+        Text("Test Header")
+      }
   }
 }
 

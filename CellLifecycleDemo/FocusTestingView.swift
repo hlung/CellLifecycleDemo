@@ -3,91 +3,96 @@ import SwiftUI
 struct FocusTestingView: View {
 
   @Namespace var mainNamespace
-//  @Namespace var subNamespace
+  @Namespace var nameSpaceL
+  @Namespace var nameSpaceR
   @Environment(\.resetFocus) var resetFocus
-  @State var selectedTab: String?
+  @State var selectedButtonTitleL: String?
+  @State var selectedButtonTitleR: String?
+  @FocusState var isFocusedL
+  @FocusState var isFocusedR
+  @FocusState var isFocusedTabBar
 
   var body: some View {
     HStack {
       VStack {
         Spacer()
-        Button ("1") {}
-        Button ("2") {}
-        Button ("3") {}
-        Button ("4") {}
-        Button ("5") {}
+        FocusButton(title: "1", selectedButtonTitle: $selectedButtonTitleL)
+//          .prefersDefaultFocus(false, in: nameSpaceL)
+        FocusButton(title: "2", selectedButtonTitle: $selectedButtonTitleL)
+          .prefersDefaultFocus(in: nameSpaceL)
+//          .prefersDefaultFocus(false, in: nameSpaceL)
+        FocusButton(title: "3", selectedButtonTitle: $selectedButtonTitleL)
+        FocusButton(title: "4", selectedButtonTitle: $selectedButtonTitleL)
+        FocusButton(title: "5", selectedButtonTitle: $selectedButtonTitleL)
         Spacer()
       }
+      .focusSection()
+      .focusScope(nameSpaceL)
+      .focused($isFocusedL)
+//      .focusable { isFocused in
+//        if isFocused {
+//          resetFocus(in: mainNamespace)
+//        }
+//      }
+      .onExitCommand(perform: {
+        resetFocus(in: nameSpaceL)
+      })
 
       VStack {
         Spacer()
-        Button ("6") {}
-          .prefersDefaultFocus(in: mainNamespace)
-        Button ("7") {}
-        Button ("8") {}
-        Button ("9") {}
-        Button ("10") {}
+        FocusButton(title: "A", selectedButtonTitle: $selectedButtonTitleR)
+//          .focusable(false)
+        FocusButton(title: "B", selectedButtonTitle: $selectedButtonTitleR)
+          .prefersDefaultFocus(in: nameSpaceR)
+        FocusButton(title: "C", selectedButtonTitle: $selectedButtonTitleR)
+//          .prefersDefaultFocus(in: nameSpaceR)
+        FocusButton(title: "D", selectedButtonTitle: $selectedButtonTitleR)
+//          .prefersDefaultFocus("D" == selectedButtonTitleL, in: nameSpaceR)
+        FocusButton(title: "E", selectedButtonTitle: $selectedButtonTitleR)
+//          .prefersDefaultFocus("E" == selectedButtonTitleL, in: nameSpaceR)
+//          .focusable { isFocused in
+//            if isFocused {
+//              resetFocus(in: subNamespace)
+//            }
+//          }
         Spacer()
       }
-//      .focusScope(mainNamespace)
+      .focusSection()
+      .focusScope(nameSpaceR)
+      .focused($isFocusedR)
+      .onExitCommand(perform: {
+        isFocusedL = true
+        Task {
+          try? await Task.sleep(nanoseconds: 1)
+          resetFocus(in: nameSpaceL)
+        }
+
+//        resetFocus(in: mainNamespace)
+      })
+      .prefersDefaultFocus(in: mainNamespace)
     }
-    .focusScope(mainNamespace) // also not working
-    .onExitCommand(perform: {
-      resetFocus(in: mainNamespace)
-    })
+    .focusScope(mainNamespace)
+//    .onExitCommand(perform: {
+//      isFocusedTabBar = true
+//      resetFocus(in: mainNamespace)
+//    })
     .frame(width: 500)
     .background(.brown)
-    .safeAreaInset(edge: .leading, spacing: 0) {
-      tabBarView
-    }
-  }
+//    .onChange(of: isFocusedL) { oldValue, newValue in
+//      resetFocus(in: nameSpaceR)
+//    }
 
-  private var tabBarView: some View {
-    ZStack {
-      VStack {
-        Spacer()
-        Button ("A") {}
-//          .prefersDefaultFocus(in: mainNamespace)
-        Button ("B") {}
-        Button ("C") {}
-        Button ("D") {}
-        Button ("E") {}
-        Spacer()
-      }
-//      .focusScope(subNamespace)
-      .background(.regularMaterial)
-    }
+    Button("Press menu here to exit") {}
   }
 
 }
 
-struct Tab: Equatable, Hashable, Identifiable {
-  let id: String
-  let imageName: String
+struct FocusButton: View {
   let title: String
+  @Binding var selectedButtonTitle: String?
 
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
+  var body: some View {
+    Button (title) { selectedButtonTitle = title }
+      .background(selectedButtonTitle == title ? .red : .clear)
   }
 }
-
-extension Tab {
-  static let allTabs: [Tab] = [.search, .home, .me, .vikiPass, .settings]
-
-  static let home = Tab(
-    id: "home", imageName: "tab_icon_home", title: "Home"
-  )
-  static let search = Tab(
-    id: "search", imageName: "tab_icon_search", title: "Search"
-  )
-  static let me = Tab(
-    id: "me", imageName: "tab_icon_me", title: "Me"
-  )
-  static let vikiPass = Tab(
-    id: "vikiPass", imageName: "tab_icon_vikipass", title: "Pass"
-  )
-  static let settings = Tab(
-    id: "settings", imageName: "tab_icon_settings", title: "Settings"
-  )
-}
-
